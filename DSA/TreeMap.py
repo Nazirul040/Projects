@@ -21,6 +21,17 @@ def insert(key, data, tree):
     return tree
 
 
+def find(tree, key):
+    if tree is None:
+        return None
+    
+    if key < tree.key:
+        return find(tree.left, key)
+    elif key > tree.key:
+        return find(tree.right, key)
+    else:
+        return tree.data
+
 def display(root):
     """Returns list of strings, width, height, and horizontal coordinate of the root."""
     # No child.
@@ -72,7 +83,6 @@ def print_tree(root):
         print(line)
 
 
-
 if __name__ == '__main__':
     tree = None
     
@@ -91,3 +101,4 @@ if __name__ == '__main__':
     tree = insert('satwik', data['satwik'], tree)
 
     print_tree(tree)
+    print(find(tree, 'sohom'))
