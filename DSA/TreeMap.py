@@ -32,6 +32,81 @@ def find(tree, key):
     else:
         return tree.data
 
+
+def height(tree):
+    if tree is None:
+        return 0
+    
+    return 1 + max(height(tree.left), height(tree.right))
+
+
+def size(tree):
+    if tree is None:
+        return 0
+    
+    return 1 + height(tree.left) + height(tree.right)
+
+
+def inorder_traversal(tree):
+    if tree is None:
+        return None
+    if tree.left is None and tree.right is None:
+        return tree.key
+    
+    return [inorder_traversal(tree.left)] + [tree.key] + [inorder_traversal(tree.right)]
+
+
+def preorder_traversal(tree):
+    if tree is None:
+        return None
+    if tree.left is None and tree.right is None:
+        return tree.key
+    
+    return [tree.key] + [preorder_traversal(tree.left)] + [preorder_traversal(tree.right)]
+
+
+def postorder_traversal(tree):
+    if tree is None:
+        return None
+    if tree.left is None and tree.right is None:
+        return tree.key
+    
+    return [preorder_traversal(tree.left)] + [preorder_traversal(tree.right)] + [tree.key]
+
+
+def min_max(tree):
+    if tree is None:
+        return 'zzzzz', 'aaaaa'
+
+    left_min, left_max = min_max(tree.left)
+    right_min, right_max = min_max(tree.right)
+
+    curr_min = min(tree.key, left_min, right_min)
+    curr_max = max(tree.key, left_max, right_max)
+
+    return curr_min, curr_max
+
+
+def delete(tree, key):
+    if key < tree.key:
+        if tree.left:
+            tree.left = delete(tree.left, key)
+    elif key > tree.key:
+        if tree.right:
+            tree.right = delete(tree.right, key)
+    else:
+        if tree.left is None:
+            return tree.right
+        elif tree.right is None:
+            return tree.left
+        else:
+            min_larger_node = min_max(tree)[0]
+            tree.key, tree.data = min_larger_node.key, min_larger_node.data
+            tree.right = delete(tree.right, min_larger_node.key)
+
+    return tree
+
+
 def display(root):
     """Returns list of strings, width, height, and horizontal coordinate of the root."""
     # No child.
@@ -102,3 +177,10 @@ if __name__ == '__main__':
 
     print_tree(tree)
     print(find(tree, 'sohom'))
+    print(height(tree))
+    print(size(tree))
+    print(inorder_traversal(tree))
+    print(preorder_traversal(tree))
+    print(postorder_traversal(tree))
+    print(f"Minimum : {min_max(tree)[0]} and Maximum : {min_max(tree)[1]}",)
+    print_tree(delete(tree, 'sagnik'))
